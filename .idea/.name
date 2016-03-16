@@ -1,0 +1,1 @@
+string_class_in_the_list
