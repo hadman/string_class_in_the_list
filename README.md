@@ -15,9 +15,8 @@
 
 **Члены класса:**
 >- elem* head; // указатель на начало
->- struct elem \n
-> { \n
-> char info; // символ \n
-> elem* pointer; // указатель \n
-> } \n
-> 
+>- struct elem
+> {
+> char info; // символ
+> elem* pointer; // указатель
+> }
