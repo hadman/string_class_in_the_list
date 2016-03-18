@@ -38,8 +38,11 @@ public:
     {
 
     }
+    strClass(strClass& another) // КОНСТРУКТОР КОПИРОВАНИЯ
+    {
 
-    strClass& operator=(strClass& another) // присваивание объекта
+    }
+    strClass& operator=(strClass& another) // ПРИСВАИВАНИЕ ОБЪЕКТА
     {
         if(head == another.head) // самоприсваивание
         {
@@ -58,13 +61,13 @@ public:
     }
 
 
-    strClass& operator+(char a) // конкатенация символа
+    strClass& operator+(char a) // КОНКАТЕНАЦИЯ СОМВОЛА
     {
         this->add(a);
         return *this;
     }
 
-    strClass&operator+(string str) // конкатенация строки
+    strClass&operator+(string str) // КОНКАТЕНАЦИЯ СТРОКИ
     {
         for (int i = 0; i < str.length(); ++i) {
             this->add(str[i]);
@@ -72,7 +75,7 @@ public:
         return *this;
     }
 
-    strClass&operator+(strClass& another) // конкатенация объекта
+    strClass&operator+(strClass& another) // КОНКАТЕНАЦИЯ ОБЪЕКТА. не работает если складываем 2 одинаковых объекта
     {
         elem* curr = another.head;
         if(curr == NULL) // если объект пустой
@@ -87,6 +90,23 @@ public:
             }
         }
         return *this;
+    }
+
+    friend ostream& operator <<(ostream& out, const strClass& obj) // ПЕРЕГРУЗКА ПОТОКА
+    {
+        elem* curr = obj.head;
+        if(curr == NULL)
+        {
+            out << " ";
+        }else
+        {
+            while (curr != NULL)
+            {
+                out << curr->info;
+                curr = curr->ptr;
+            }
+        }
+        return out;
     }
 
     void printStr()
@@ -113,23 +133,15 @@ public:
 int main()
 {
     strClass str;
-    strClass str2;
+
 
     str = str + 'a';
     str = str + 'b';
     str = str + 'c';
     str = str + 'd';
-    str = str + "hello";
+    str = str + " hello";
 
-
-    str2 = str2 + " World";
-    str = str + str2;
-
-    cout << "stringClass Str = ";
-    str.printStr();
-
-    cout << "stringClass Str2 = ";
-    str2.printStr();
+    cout << "str = " <<  str << endl;
 
     cout << "**********" << endl;
     cout << "**********" << endl;
