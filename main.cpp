@@ -109,24 +109,24 @@ public:
         return out;
     }
 
-    void printStr()
+    int length()
     {
-        //cout << "head = " << head << endl;
-        elem* curr = head; // запоминаем
-        if(curr == NULL) // если строка была пустой
+        int i=0;
+        elem* curr = head;
+        if (curr == NULL)
         {
-            cout << "string is EMPTY!" << endl;
-        } else
+            i = 0;
+        }else
         {
-            while(curr->ptr != NULL) // ищем последний элемент списка
+            while (curr->ptr != NULL)
             {
-                cout << curr->info;
-                curr = curr -> ptr;
+                i++;
+                curr= curr->ptr;
             }
-            cout << curr->info;
-            cout << endl;
         }
+        return i+1;
     }
+
 };
 
 
@@ -134,14 +134,14 @@ int main()
 {
     strClass str;
 
-
     str = str + 'a';
     str = str + 'b';
     str = str + 'c';
     str = str + 'd';
-    str = str + " hello";
+    str = str + "hello";
 
     cout << "str = " <<  str << endl;
+    cout << "length of str = " << str.length() << endl;
 
     cout << "**********" << endl;
     cout << "**********" << endl;
