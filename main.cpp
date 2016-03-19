@@ -36,14 +36,17 @@ public:
 
     ~strClass() // ДЕСТРУКТОР
     {
-        elem *prev = head;
-        elem *curr = prev->ptr;
+        elem *prev = head; // 1-й узел
+        elem *curr = prev->ptr; // 2-й узел
         while (curr != NULL)
         {
+            //cout << "prev = "<< prev->info << endl;
             delete[] prev; // удаляем предыдущий узел
             prev = curr;
+
             curr = curr->ptr;
         }
+        //cout << "prev = "<< prev->info << endl;
         delete[] prev; // удаляем последний узел
     }
 
@@ -73,6 +76,63 @@ public:
             curr = curr->ptr;
         }
         return *this; // возвращаем голову нового списка
+    }
+
+    strClass &operator=(char a) // ПРИСВАИВАНИЕ СИМВОЛА
+    {
+
+        if(head != NULL)
+        {
+
+
+            elem *prev = head->ptr; // 2-й узел
+            elem *curr = prev->ptr; // 3-й узел
+
+            head->info = a;
+            head->ptr = NULL;
+
+            while (curr != NULL)
+            {
+                //cout << "prev " << prev->info << endl;
+                delete[] prev; // удаляем предыдущий узел
+                prev = curr;
+                curr = curr->ptr;
+            }
+            //cout << "prev " << prev->info << endl;
+            delete[] prev;
+        }
+    }
+
+    strClass &operator=(string str) // ПРИСВАИВАНИЕ СТРОКИ
+    {
+        int i=0;
+        elem* curr = head;
+        elem*prev;
+        if(curr != NULL)
+        {
+            while (curr != NULL && i < str.length())
+            {
+                curr->info=str[i];
+                prev = curr; // запоминам предыдущий
+                curr = curr->ptr;
+                i++;
+            }
+            if (curr != NULL) // если остались свободные узлы
+            {
+                prev->ptr=NULL; // теперь он последний
+                prev = curr;
+                curr = curr->ptr;
+                while (curr != NULL)
+                {
+                    //cout << "prev " << prev->info << endl;
+                    delete[] prev; // удаляем предыдущий узел
+                    prev = curr;
+                    curr = curr->ptr;
+                }
+                //cout << "prev " << prev->info << endl;
+                delete[] prev;
+            }
+        }
     }
 
 
@@ -124,7 +184,7 @@ public:
         int i = 0;
         elem *curr = head;
         if (curr == NULL) {
-            i = 0;
+            return 0;
         } else {
             while (curr->ptr != NULL) {
                 i++;
@@ -146,14 +206,22 @@ int main() {
     str = str + 'd';
     str = str + "hello";
 
-    strClass str2(str);
 
-//    cout << "str = " << str << endl;
+    cout << "str = " << str << endl;
+    cout << "length of str = " << str.length() << endl;
+    cout << "**********" << endl;
+
+    str = "miui";
+
+    cout << "str = " << str << endl;
+    cout << "length of str = " << str.length() << endl;
+
+
 //    cout << "str2 = " << str2 << endl;
 
-//    cout << "length of str = " << str.length() << endl;
 
-    cout << "**********" << endl;
+
+
     cout << "**********" << endl;
     return 0;
 }
