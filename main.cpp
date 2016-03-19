@@ -33,6 +33,19 @@ public:
     {
         head = NULL;
     }
+    strClass(string str) // КОНСТРУКТОР
+    {
+        head = NULL;
+        for (int i = 0; i < str.length(); ++i) {
+            add(str[i]);
+        }
+    }
+
+    strClass(char a) // КОНСТРУКТОР
+    {
+        head = NULL;
+        add(a);
+    }
 
     ~strClass() // ДЕСТРУКТОР
     {
@@ -51,13 +64,13 @@ public:
         head = NULL; // зануляем список
     }
 
-    strClass(strClass &another) // КОНСТРУКТОР КОПИРОВАНИЯ. рпботает неправильно
+    strClass(const strClass &another) // КОНСТРУКТОР КОПИРОВАНИЯ
     {
-        elem *head = new elem;
-        elem *curr = another.head;
-
-        while (curr != NULL) {
-            this->add(curr->info);
+        head = NULL;
+        elem* curr = another.head;
+        while (curr != NULL)
+        {
+            add(curr->info);
             curr = curr->ptr;
         }
     }
@@ -224,6 +237,7 @@ public:
 
     friend ostream &operator<<(ostream &out, const strClass &obj) // ПЕРЕГРУЗКА ПОТОКА
     {
+        //cout << "memory OBJ = " << obj.head << endl;
         elem *curr = obj.head;
         if (curr == NULL) {
             out << " ";
@@ -262,7 +276,9 @@ int main() {
     str = str + 'd';
     str = str + "hello";
 
-    strClass str2;
+    cout << "**********" << endl;
+    strClass str2(str);
+    str2 = str2 + ".test";
 
     cout << "str = " << str << endl;
     cout << "length of str = " << str.length() << endl;
