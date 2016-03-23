@@ -6,6 +6,13 @@ struct elem {
     struct elem *ptr;
 };
 
+
+//ввести указатель на конец
+//метод линейного поиска подстроки х 2 для объекта и строки
+//метод копирования с какого-то символа по указанную длину
+//отдельно написать метод: найти все вхождения и заменить
+// перегрузить в обе стороны
+
 class strClass {
 private:
     elem *head;
@@ -47,24 +54,27 @@ public:
         add(a);
     }
 
-    ~strClass() // ДЕСТРУКТОР
+    ~strClass() // ДЕСТРУКТОР .РАБОТАЕТ
     {
         elem *prev = head; // 1-й узел
-        elem *curr = prev->ptr; // 2-й узел
-        while (curr != NULL)
+        if (prev != NULL) // если список уже не нулевой
         {
-            //cout << "prev = "<< prev->info << endl;
-            delete[] prev; // удаляем предыдущий узел
-            prev = curr;
+            elem *curr = prev->ptr; // 2-й узел
+            while (curr != NULL)
+            {
+                //cout << "prev = "<< prev->info << endl;
+                delete[] prev; // удаляем предыдущий узел
+                prev = curr;
 
-            curr = curr->ptr;
+                curr = curr->ptr;
+            }
+            //cout << "prev = "<< prev->info << endl;
+            delete[] prev; // удаляем последний узел
+            head = NULL; // зануляем список
         }
-        //cout << "prev = "<< prev->info << endl;
-        delete[] prev; // удаляем последний узел
-        head = NULL; // зануляем список
     }
 
-    strClass(const strClass &another) // КОНСТРУКТОР КОПИРОВАНИЯ
+    strClass(const strClass &another) // КОНСТРУКТОР КОПИРОВАНИЯ. РАБОТАЕТ
     {
         head = NULL;
         elem* curr = another.head;
@@ -75,7 +85,7 @@ public:
         }
     }
 
-    strClass &operator=(strClass &another) // ПРИСВАИВАНИЕ ОБЪЕКТА.
+    strClass &operator=(strClass another) // ПРИСВАИВАНИЕ ОБЪЕКТА. РАБОТАЕТ
     {
         if (head == another.head) // самоприсваивание
         {
@@ -84,8 +94,6 @@ public:
         elem* curr = head;
         elem* currAnother = another.head;
         elem*prev;
-        if(curr != NULL) // если this непуста
-        {
             if(currAnother != NULL) // если another непуста
             {
                 while (curr != NULL && currAnother != NULL)
@@ -110,57 +118,99 @@ public:
                     cout << "prev " << prev->info << endl;
                     delete[] prev;
                 }
+                if(curr == NULL) // если another > this
+                {
+                    while (currAnother != NULL)
+                    {
+                        add(currAnother->info);
+                        currAnother = currAnother->ptr;
+                    }
+                }
+
             } else // удаляем список this
             {
-                prev = head; // 1-й узел
-                curr = prev->ptr; // 2-й узел
-                while (curr != NULL)
+                if(head != NULL) // если он уже не пустой
                 {
-                    cout << "prev = "<< prev->info << endl;
-                    delete[] prev; // удаляем предыдущий узел
-                    prev = curr;
+                    prev = head; // 1-й узел
+                    curr = prev->ptr; // 2-й узел
+                    while (curr != NULL)
+                    {
+                        cout << "prev = "<< prev->info << endl;
+                        delete[] prev; // удаляем предыдущий узел
+                        prev = curr;
 
-                    curr = curr->ptr;
+                        curr = curr->ptr;
+                    }
+                    cout << "prev = "<< prev->info << endl;
+                    delete[] prev; // удаляем последний узел
+                    head = NULL; // зануляем список
                 }
-                cout << "prev = "<< prev->info << endl;
-                delete[] prev; // удаляем последний узел
-                head = NULL; // зануляем список
             }
-        }
     }
 
     strClass &operator=(char a) // ПРИСВАИВАНИЕ СИМВОЛА
     {
-
-        if(head != NULL)
-        {
-
-
-            elem *prev = head->ptr; // 2-й узел
-            elem *curr = prev->ptr; // 3-й узел
-
-            head->info = a;
-            head->ptr = NULL;
-
-            while (curr != NULL)
+        int i = 1;
+        elem* curr = head;
+        elem*prev;
+            while (curr != NULL && i <= 1)
             {
-                //cout << "prev " << prev->info << endl;
-                delete[] prev; // удаляем предыдущий узел
+//                curr->info=a;
+                prev = curr; // запоминам предыдущий
+                curr = curr->ptr;
+                i++;
+                //cout << "while" << endl;
+            }
+            if (curr != NULL) // если остались свободные узлы
+            {
+                prev->ptr = NULL; // теперь он последний
                 prev = curr;
                 curr = curr->ptr;
+                while (curr != NULL) {
+                    //cout << "prev " << prev->info << endl;
+                    delete[] prev; // удаляем предыдущий узел
+                    prev = curr;
+                    curr = curr->ptr;
+                }
+                //cout << "prev " << prev->info << endl;
+                delete[] prev;
             }
-            //cout << "prev " << prev->info << endl;
-            delete[] prev;
-        }
+            if (head == NULL)
+            {
+                add(a);
+                //cout << "head = NULL" << endl;
+            }else
+                if (curr == NULL)
+                {
+                    head->info=a;
+                   // cout << "curr = NULL" << endl;
+                }
+//        elem *prev = head; // 1-й узел
+//        if (prev != NULL)
+//        {
+//            elem *curr = prev->ptr; // 2-й узел
+//            while (curr != NULL)
+//            {
+//                //cout << "prev = "<< prev->info << endl;
+//                delete[] prev; // удаляем предыдущий узел
+//                prev = curr;
+//
+//                curr = curr->ptr;
+//            }
+//            //cout << "prev = "<< prev->info << endl;
+//            delete[] prev; // удаляем последний узел
+//            head = NULL; // зануляем список
+//        }
+//        add(a);
     }
 
-    strClass &operator=(string str) // ПРИСВАИВАНИЕ СТРОКИ
+    strClass &operator=(string str) // ПРИСВАИВАНИЕ СТРОКИ.РАБОТАЕТ
     {
         int i=0;
         elem* curr = head;
         elem*prev;
-        if(curr != NULL) // если список не пустой
-        {
+//        if(curr != NULL) // если список не пустой
+//        {
             if(str.length()!=0) // если строка не пустая
             {
                 while (curr != NULL && i < str.length())
@@ -172,11 +222,10 @@ public:
                 }
                 if (curr != NULL) // если остались свободные узлы
                 {
-                    prev->ptr=NULL; // теперь он последний
+                    prev->ptr = NULL; // теперь он последний
                     prev = curr;
                     curr = curr->ptr;
-                    while (curr != NULL)
-                    {
+                    while (curr != NULL) {
                         //cout << "prev " << prev->info << endl;
                         delete[] prev; // удаляем предыдущий узел
                         prev = curr;
@@ -185,7 +234,14 @@ public:
                     //cout << "prev " << prev->info << endl;
                     delete[] prev;
                 }
-            }else // если список не пуст, а строка пуста
+                if (curr == NULL)
+                {
+                    while (i < str.length()) {
+                        add(str[i]);
+                        i++;
+                    }
+                }
+            }else // если строка пуста
             {
                 prev = head; // 1-й узел
                 curr = prev->ptr; // 2-й узел
@@ -202,37 +258,45 @@ public:
                 head = NULL; // зануляем список
             }
         }
+
+
+
+    strClass operator+(char a) // КОНКАТЕНАЦИЯ СИМВОЛА. РАБОТАЕТ
+    {
+        strClass tmp(*this); // создаем копию
+        tmp.add(a);
+//        cout << "obj= " << tmp << endl;
+        return tmp;
     }
 
-
-    strClass &operator+(char a) // КОНКАТЕНАЦИЯ СИМВОЛА
+    strClass operator+(string str) // КОНКАТЕНАЦИЯ СТРОКИ. РАБОТАЕТ
     {
-        this->add(a);
-        return *this;
-    }
-
-    strClass &operator+(string str) // КОНКАТЕНАЦИЯ СТРОКИ
-    {
+        strClass tmp(*this); // создаем копию
         for (int i = 0; i < str.length(); ++i) {
-            this->add(str[i]);
+            tmp.add(str[i]);
         }
-        return *this;
+//        cout << "obj= " << tmp << endl;
+//        cout << "obj adress= " << tmp.head << endl;
+        return tmp;
     }
 
-    strClass &operator+(strClass &another) // КОНКАТЕНАЦИЯ ОБЪЕКТА. не работает если складываем 2 одинаковых объекта
+    strClass operator+(strClass &another) // КОНКАТЕНАЦИЯ ОБЪЕКТА. РАБОТАЕТ
     {
-        elem *curr = another.head;
-        if (curr == NULL) // если объект пустой
+        strClass tmp(*this); // создаем копию
+//        cout << "head = " << head << endl;
+//        cout << "head another = " << another.head << endl;
+        elem *currAnother = another.head;
+        if (currAnother == NULL) // если объект пустой
         {
             return *this;
         } else // если объект не пустой
         {
-            while (curr != NULL) {
-                this->add(curr->info);
-                curr = curr->ptr;
+            while (currAnother != NULL) {
+                tmp.add(currAnother->info);
+                currAnother = currAnother->ptr;
             }
         }
-        return *this;
+        return tmp;
     }
 
     friend ostream &operator<<(ostream &out, const strClass &obj) // ПЕРЕГРУЗКА ПОТОКА
@@ -264,36 +328,26 @@ public:
         return i + 1;
     }
 
+    // поик подстроки -2
+   //выделение подстроки
+
 };
 
 
 int main() {
-    strClass str;
-
-    str = str + 'a';
-    str = str + 'b';
-    str = str + 'c';
-    str = str + 'd';
-    str = str + "hello";
+    strClass str("HEllo World");
+    strClass str1 ( str + ' ' + "****" + ' '  + str);
+    str =  ' '  + str1;
 
     cout << "**********" << endl;
-    strClass str2(str);
-    str2 = str2 + ".test";
 
-    cout << "str = " << str << endl;
-    cout << "length of str = " << str.length() << endl;
+
+
+    cout << "str = " << str << "; length = " << str.length() << endl;
     cout << "**********" << endl;
 
-
-    cout << "str2 = " << str2 << endl;
-    cout << "length of str2 = " << str2.length() << endl;
-
-
-//    cout << "str2 = " << str2 << endl;
-
-
-
-
+    cout << "str1 = " << str1 << "; length = " << str1.length() << endl;
     cout << "**********" << endl;
+
     return 0;
 }
