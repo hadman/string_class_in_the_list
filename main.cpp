@@ -1,5 +1,6 @@
 #include <iostream>
 
+
 using namespace std;
 struct elem {
     char info;
@@ -7,42 +8,58 @@ struct elem {
 };
 
 
-//ввести указатель на конец
-//метод линейного поиска подстроки х 2 для объекта и строки
-//метод копирования с какого-то символа по указанную длину
-//отдельно написать метод: найти все вхождения и заменить
+// ввести указатель на конец                                    OK
+// метод линейного поиска подстроки х 2 для объекта и строки    OK
+// метод копирования с какого-то символа по указанную длину     OK
+// отдельно написать метод: найти все вхождения и заменить
 // перегрузить в обе стороны
+
 
 class strClass {
 private:
     elem *head;
+    elem *tail;
 
-    void add(char a) {
-        elem *curr = head; // запоминаем
-        elem *e = new elem; // выделяем память под структуру
-        e->info = a;
-        if (curr == NULL) // если строка была пустой
-        {
-            head = e;
-            head->ptr = NULL; // указатель на конец строки
-        } else {
-            while (curr->ptr != NULL) // ищем последний элемент списка
-            {
-                curr = curr->ptr;
-            }
-            curr->ptr = e;
-            e->ptr = NULL; // теперь e - последний элемент списка
-        }
-    }
+
 
 public:
+    void add(char a) {
+        elem *e = new elem; // выделяем память под структуру
+        e->info = a;
+        e->ptr = NULL;
+
+        if(tail == NULL)
+        {
+            head = e;
+            tail = head;
+        } else
+        {
+            tail->ptr=e;
+            tail = tail->ptr; // хвост указывает на только что добавленный
+        }
+//
+//        if (curr == NULL) // если строка была пустой
+//        {
+//            head = e;
+//            head->ptr = NULL; // указатель на конец строки
+//        } else {
+//            while (curr->ptr != NULL) // ищем последний элемент списка
+//            {
+//                curr = curr->ptr;
+//            }
+//            curr->ptr = e;
+//            e->ptr = NULL; // теперь e - последний элемент списка
+//        }
+    }
     strClass() // КОНСТРУКТОР
     {
         head = NULL;
+        tail = NULL;
     }
     strClass(string str) // КОНСТРУКТОР
     {
         head = NULL;
+        tail = NULL;
         for (int i = 0; i < str.length(); ++i) {
             add(str[i]);
         }
@@ -51,6 +68,7 @@ public:
     strClass(char a) // КОНСТРУКТОР
     {
         head = NULL;
+        tail = NULL;
         add(a);
     }
 
@@ -77,6 +95,7 @@ public:
     strClass(const strClass &another) // КОНСТРУКТОР КОПИРОВАНИЯ. РАБОТАЕТ
     {
         head = NULL;
+        tail = NULL;
         elem* curr = another.head;
         while (curr != NULL)
         {
@@ -280,6 +299,9 @@ public:
         return tmp;
     }
 
+ friend   string operator+(strClass obj);
+
+
     strClass operator+(strClass &another) // КОНКАТЕНАЦИЯ ОБЪЕКТА. РАБОТАЕТ
     {
         strClass tmp(*this); // создаем копию
@@ -314,6 +336,91 @@ public:
         return out;
     }
 
+    strClass Copy(int a, int len) // КОПИРОВАНИЕ ПОДСТРОКИ. РАБОТАЕТ
+    {
+        strClass tmp;
+        elem* curr = head;
+        int i=0;
+        while (curr != NULL && i < a + len) // поиск
+        {
+            if(i >= a)
+            {
+                tmp.add(curr->info);
+            }
+            i++;
+            curr = curr->ptr;
+        }
+
+        return tmp;
+    }
+
+    int search(string needle) // Поиск string в strClass. РАБОТАЕТ
+    {
+        elem* curr = head;
+        int j;
+        if(curr != NULL && needle.length() != 0 && needle.length() <= this->length()) // если стог и иголка не нулевые, иголка меньше стога
+        {
+            int i = 0;
+            do
+            {
+                elem* tmp = curr;
+                j = 0;
+                //cout << "tmp->info = " << tmp->info << endl;
+                while(tmp->info == needle[j]) // идем по needle
+                {
+                    j++;
+                    if (tmp->ptr == NULL)
+                    {
+                        break;
+                    }
+                    tmp=tmp->ptr;
+                }
+                if (j == needle.length())
+                {
+                    return i;
+                }
+                curr = curr->ptr;
+                i++;
+            }while(i < (this->length()-needle.length()));
+        }
+        return -1;
+    }
+
+    int search(strClass needle) // Поиск strClass в strClass. РАБОТАЕТ
+    {
+        elem* currH = head;
+        int j;
+        elem* currN;
+        if(currH != NULL && needle.length() != 0 && needle.length() <= this->length()) // если стог и иголка не нулевые, иголка меньше стога
+        {
+            int i = 0;
+            do
+            {
+                elem* tmp = currH;
+                j = 0;
+                currN = needle.head;
+                //cout << "tmp->info = " << tmp->info << endl;
+                while(tmp->info == currN->info) // идем по needle
+                {
+                    j++;
+                    if (tmp->ptr == NULL || currN->ptr == NULL)
+                    {
+                        break;
+                    }
+                    tmp=tmp->ptr;
+                    currN=currN->ptr;
+                }
+                if (j == needle.length())
+                {
+                    return i;
+                }
+                currH = currH->ptr;
+                i++;
+            }while(i < (this->length()-needle.length()));
+        }
+        return -1;
+    }
+
     int length() {
         int i = 0;
         elem *curr = head;
@@ -328,26 +435,35 @@ public:
         return i + 1;
     }
 
-    // поик подстроки -2
-   //выделение подстроки
-
 };
 
 
+
+
 int main() {
-    strClass str("HEllo World");
-    strClass str1 ( str + ' ' + "****" + ' '  + str);
-    str =  ' '  + str1;
+    strClass str;
+//    strClass str1 ( str + ' ' + "****" + ' '  + str);
+//    str =  str + str;
+//    str = str + " rty";
+
+    strClass str1("Hello World");
+//    str1 = str.Copy(2, 3);
 
     cout << "**********" << endl;
 
 
-
+str.add('h');
+    str.add('e');
+    str.add('l');
+    str.add('l');
+    str.add('o');
     cout << "str = " << str << "; length = " << str.length() << endl;
     cout << "**********" << endl;
 
     cout << "str1 = " << str1 << "; length = " << str1.length() << endl;
     cout << "**********" << endl;
+    //string needle = "l";
+//    cout << "search = " << str.search(str1) << endl;
 
     return 0;
 }
