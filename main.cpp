@@ -19,10 +19,6 @@ class strClass {
 private:
     elem *head;
     elem *tail;
-
-
-
-public:
     void add(char a) {
         elem *e = new elem; // выделяем память под структуру
         e->info = a;
@@ -37,20 +33,11 @@ public:
             tail->ptr=e;
             tail = tail->ptr; // хвост указывает на только что добавленный
         }
-//
-//        if (curr == NULL) // если строка была пустой
-//        {
-//            head = e;
-//            head->ptr = NULL; // указатель на конец строки
-//        } else {
-//            while (curr->ptr != NULL) // ищем последний элемент списка
-//            {
-//                curr = curr->ptr;
-//            }
-//            curr->ptr = e;
-//            e->ptr = NULL; // теперь e - последний элемент списка
-//        }
     }
+
+
+public:
+
     strClass() // КОНСТРУКТОР
     {
         head = NULL;
@@ -129,12 +116,12 @@ public:
                     curr = curr->ptr;
                     while (curr != NULL)
                     {
-                        cout << "prev " << prev->info << endl;
+                        //cout << "prev " << prev->info << endl;
                         delete[] prev; // удаляем предыдущий узел
                         prev = curr;
                         curr = curr->ptr;
                     }
-                    cout << "prev " << prev->info << endl;
+                    //cout << "prev " << prev->info << endl;
                     delete[] prev;
                 }
                 if(curr == NULL) // если another > this
@@ -299,7 +286,19 @@ public:
         return tmp;
     }
 
- friend   string operator+(strClass obj);
+    friend strClass operator+(string str, strClass& obj); // КОНКАТЕНАЦИЯ СТРОКИ.
+//    {
+//        string tmpStr=str;
+//        elem* curr = obj.head;
+//        while (curr != NULL)
+//        {
+//            tmpStr += curr->info; // посимвольно записываем в string
+//            curr = curr->ptr;
+//        }
+//        cout << "tmp = " << tmpStr << endl;
+//        strClass tmp(tmpStr);
+//        return tmp;
+//    }
 
 
     strClass operator+(strClass &another) // КОНКАТЕНАЦИЯ ОБЪЕКТА. РАБОТАЕТ
@@ -421,6 +420,11 @@ public:
         return -1;
     }
 
+
+
+
+
+
     int length() {
         int i = 0;
         elem *curr = head;
@@ -437,14 +441,48 @@ public:
 
 };
 
+strClass operator+(string str, strClass& obj) // КОНКАТЕНАЦИЯ СТРОКИ.
+{
+    string tmpStr=str;
+    elem* curr = obj.head;
+    while (curr != NULL)
+    {
+        tmpStr += curr->info; // посимвольно записываем в string
+        curr = curr->ptr;
+    }
+    //cout << "tmp = " << tmpStr << endl;
+    strClass tmp(tmpStr);
+    return tmp;
+}
 
+void searchAndReplace(strClass& obj, string str, string push)
+{
+    int i;
+    int size;
+    int strLen = str.length();
+    strClass left;
+    strClass right;
+
+
+    while(obj.search(str) != -1)
+    {
+        i = obj.search(str); // индекс вхождения
+
+        left = obj.Copy(0,i);
+        right = obj.Copy(i+strLen, obj.length()-(i+strLen));
+        obj = left + push + right;
+        //cout << "left = " << left << " right = " << right << endl;
+    }
+
+}
 
 
 int main() {
-    strClass str;
+
+    strClass str("World");
 //    strClass str1 ( str + ' ' + "****" + ' '  + str);
 //    str =  str + str;
-//    str = str + " rty";
+   str = "Hello" + str;
 
     strClass str1("Hello World");
 //    str1 = str.Copy(2, 3);
@@ -452,15 +490,11 @@ int main() {
     cout << "**********" << endl;
 
 
-str.add('h');
-    str.add('e');
-    str.add('l');
-    str.add('l');
-    str.add('o');
     cout << "str = " << str << "; length = " << str.length() << endl;
     cout << "**********" << endl;
+    searchAndReplace(str,"l","m");
 
-    cout << "str1 = " << str1 << "; length = " << str1.length() << endl;
+    cout << "new str = " << str << "; length = " << str.length() << endl;
     cout << "**********" << endl;
     //string needle = "l";
 //    cout << "search = " << str.search(str1) << endl;
