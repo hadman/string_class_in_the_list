@@ -191,23 +191,6 @@ public:
                     head->info=a;
                    // cout << "curr = NULL" << endl;
                 }
-//        elem *prev = head; // 1-й узел
-//        if (prev != NULL)
-//        {
-//            elem *curr = prev->ptr; // 2-й узел
-//            while (curr != NULL)
-//            {
-//                //cout << "prev = "<< prev->info << endl;
-//                delete[] prev; // удаляем предыдущий узел
-//                prev = curr;
-//
-//                curr = curr->ptr;
-//            }
-//            //cout << "prev = "<< prev->info << endl;
-//            delete[] prev; // удаляем последний узел
-//            head = NULL; // зануляем список
-//        }
-//        add(a);
     }
 
     strClass &operator=(string str) // ПРИСВАИВАНИЕ СТРОКИ.РАБОТАЕТ
@@ -287,19 +270,6 @@ public:
     }
 
     friend strClass operator+(string str, strClass& obj); // КОНКАТЕНАЦИЯ СТРОКИ.
-//    {
-//        string tmpStr=str;
-//        elem* curr = obj.head;
-//        while (curr != NULL)
-//        {
-//            tmpStr += curr->info; // посимвольно записываем в string
-//            curr = curr->ptr;
-//        }
-//        cout << "tmp = " << tmpStr << endl;
-//        strClass tmp(tmpStr);
-//        return tmp;
-//    }
-
 
     strClass operator+(strClass &another) // КОНКАТЕНАЦИЯ ОБЪЕКТА. РАБОТАЕТ
     {
