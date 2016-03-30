@@ -325,34 +325,10 @@ public:
 
     int search(string needle) // Поиск string в strClass. РАБОТАЕТ
     {
-        elem* curr = head;
-        int j;
-        if(curr != NULL && needle.length() != 0 && needle.length() <= this->length()) // если стог и иголка не нулевые, иголка меньше стога
-        {
-            int i = 0;
-            do
-            {
-                elem* tmp = curr;
-                j = 0;
-                //cout << "tmp->info = " << tmp->info << endl;
-                while(tmp->info == needle[j]) // идем по needle
-                {
-                    j++;
-                    if (tmp->ptr == NULL)
-                    {
-                        break;
-                    }
-                    tmp=tmp->ptr;
-                }
-                if (j == needle.length())
-                {
-                    return i;
-                }
-                curr = curr->ptr;
-                i++;
-            }while(i <= (this->length()-needle.length()));
-        }
-        return -1;
+        strClass tmp(needle);
+        int i;
+        i= this->search(tmp);
+        return i;
     }
 
     int search(strClass needle) // Поиск strClass в strClass. РАБОТАЕТ
@@ -456,13 +432,13 @@ strClass searchAndReplace(strClass& obj, strClass& seach, strClass& replace)
 
 int main() {
 
-    strClass str("mksha");
-    strClass s("ksha");
+    strClass str("masha");
+    strClass s("a");
     strClass r("aaa");
 
     cout << "seaach rep = " << searchAndReplace(str,s,r) << endl;
 
-    cout << str.search(s) << endl;
+    cout << str.search("asha") << endl;
 
     cout << "str = " << str << "; length = " << str.length() << endl;
     cout << "**********" << endl;
