@@ -350,7 +350,7 @@ public:
                 }
                 curr = curr->ptr;
                 i++;
-            }while(i < (this->length()-needle.length()));
+            }while(i <= (this->length()-needle.length()));
         }
         return -1;
     }
@@ -385,7 +385,7 @@ public:
                 }
                 currH = currH->ptr;
                 i++;
-            }while(i < (this->length()-needle.length()));
+            }while(i <= (this->length()-needle.length()));
         }
         return -1;
     }
@@ -456,13 +456,13 @@ strClass searchAndReplace(strClass& obj, strClass& seach, strClass& replace)
 
 int main() {
 
-    strClass str("hello World");
-    strClass s("d");
-    strClass r("a");
+    strClass str("mksha");
+    strClass s("ksha");
+    strClass r("aaa");
 
     cout << "seaach rep = " << searchAndReplace(str,s,r) << endl;
 
-    cout << str.search("d") << endl;
+    cout << str.search(s) << endl;
 
     cout << "str = " << str << "; length = " << str.length() << endl;
     cout << "**********" << endl;
