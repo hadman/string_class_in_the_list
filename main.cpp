@@ -425,46 +425,46 @@ strClass operator+(string str, strClass& obj) // КОНКАТЕНАЦИЯ СТР
     return tmp;
 }
 
-void searchAndReplace(strClass& obj, string str, string push)
+strClass searchAndReplace(strClass& obj, strClass& seach, strClass& replace)
 {
-    int i;
-    int size;
-    int strLen = str.length();
+    strClass tmp(obj);
     strClass left;
-    strClass right;
-
-
-    while(obj.search(str) != -1)
+    strClass right(tmp);
+    if (right.search(seach) != -1)
     {
-        i = obj.search(str); // индекс вхождения
-
-        left = obj.Copy(0,i);
-        right = obj.Copy(i+strLen, obj.length()-(i+strLen));
-        obj = left + push + right;
-        //cout << "left = " << left << " right = " << right << endl;
+        int i = right.search(seach);
+        strClass left = right.Copy(0,i);
+        //cout << "left = " << left << endl;
+        strClass right = tmp.Copy(i+seach.length(), tmp.length()-(i+seach.length()));
+        //cout << "right = " << right << endl;
+        if (right.search(seach) != -1)
+        {
+            right = searchAndReplace(right,seach,replace);
+            //cout << "new right = " << right << endl;
+            tmp = left + replace + right;
+        } else
+        {
+            tmp = left + replace + right;
+        }
+    }else
+    {
+        return tmp;
     }
-
+    return tmp;
 }
 
 
 int main() {
 
-    strClass str("World");
-//    strClass str1 ( str + ' ' + "****" + ' '  + str);
-//    str =  str + str;
-   str = "Hello" + str;
+    strClass str("hello World");
+    strClass s("d");
+    strClass r("a");
 
-    strClass str1("Hello World");
-//    str1 = str.Copy(2, 3);
+    cout << "seaach rep = " << searchAndReplace(str,s,r) << endl;
 
-    cout << "**********" << endl;
-
+    cout << str.search("d") << endl;
 
     cout << "str = " << str << "; length = " << str.length() << endl;
-    cout << "**********" << endl;
-    searchAndReplace(str,"l","m");
-
-    cout << "new str = " << str << "; length = " << str.length() << endl;
     cout << "**********" << endl;
     //string needle = "l";
 //    cout << "search = " << str.search(str1) << endl;
