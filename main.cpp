@@ -11,8 +11,8 @@ struct elem {
 // ввести указатель на конец                                    OK
 // метод линейного поиска подстроки х 2 для объекта и строки    OK
 // метод копирования с какого-то символа по указанную длину     OK
-// отдельно написать метод: найти все вхождения и заменить
-// перегрузить в обе стороны
+// отдельно написать метод: найти все вхождения и заменить      OK
+// перегрузить в обе стороны                                    OK
 
 
 class strClass {
@@ -37,7 +37,6 @@ private:
 
 
 public:
-
     strClass() // КОНСТРУКТОР
     {
         head = NULL;
@@ -248,8 +247,6 @@ public:
             }
         }
 
-
-
     strClass operator+(char a) // КОНКАТЕНАЦИЯ СИМВОЛА. РАБОТАЕТ
     {
         strClass tmp(*this); // создаем копию
@@ -269,9 +266,9 @@ public:
         return tmp;
     }
 
-    friend strClass operator+(string str, strClass& obj); // КОНКАТЕНАЦИЯ СТРОКИ.
+    friend strClass operator+(string str, strClass obj); // КОНКАТЕНАЦИЯ СТРОКИ.
 
-    strClass operator+(strClass &another) // КОНКАТЕНАЦИЯ ОБЪЕКТА. РАБОТАЕТ
+    strClass operator+(strClass another) // КОНКАТЕНАЦИЯ ОБЪЕКТА. РАБОТАЕТ
     {
         strClass tmp(*this); // создаем копию
 //        cout << "head = " << head << endl;
@@ -295,7 +292,7 @@ public:
         //cout << "memory OBJ = " << obj.head << endl;
         elem *curr = obj.head;
         if (curr == NULL) {
-            out << " ";
+            out << "";
         } else {
             while (curr != NULL) {
                 out << curr->info;
@@ -366,11 +363,6 @@ public:
         return -1;
     }
 
-
-
-
-
-
     int length() {
         int i = 0;
         elem *curr = head;
@@ -384,10 +376,9 @@ public:
         }
         return i + 1;
     }
-
 };
 
-strClass operator+(string str, strClass& obj) // КОНКАТЕНАЦИЯ СТРОКИ.
+strClass operator+(string str, strClass obj) // КОНКАТЕНАЦИЯ СТРОКИ.
 {
     string tmpStr=str;
     elem* curr = obj.head;
@@ -401,32 +392,31 @@ strClass operator+(string str, strClass& obj) // КОНКАТЕНАЦИЯ СТР
     return tmp;
 }
 
-strClass searchAndReplace(strClass& obj, strClass& seach, strClass& replace)
+strClass searchAndReplace(strClass& obj, strClass seach, strClass replace)
 {
-    strClass tmp(obj);
     strClass left;
-    strClass right(tmp);
+    strClass right(obj);
     if (right.search(seach) != -1)
     {
         int i = right.search(seach);
         strClass left = right.Copy(0,i);
         //cout << "left = " << left << endl;
-        strClass right = tmp.Copy(i+seach.length(), tmp.length()-(i+seach.length()));
+        strClass right = obj.Copy(i+seach.length(), obj.length()-(i+seach.length()));
         //cout << "right = " << right << endl;
         if (right.search(seach) != -1)
         {
             right = searchAndReplace(right,seach,replace);
             //cout << "new right = " << right << endl;
-            tmp = left + replace + right;
+            obj = left + replace + right;
         } else
         {
-            tmp = left + replace + right;
+            obj = left + replace + right;
         }
     }else
     {
-        return tmp;
+        return obj;
     }
-    return tmp;
+    return obj;
 }
 
 
@@ -434,9 +424,10 @@ int main() {
 
     strClass str("masha");
     strClass s("a");
-    strClass r("aaa");
+    strClass r("g");
+    //strClass tmp = r+str;
 
-    cout << "seaach rep = " << searchAndReplace(str,s,r) << endl;
+    cout << "seaach rep = " << searchAndReplace(str,s,s+s+"z"+("b"+s)) << endl;
 
     cout << str.search("asha") << endl;
 
